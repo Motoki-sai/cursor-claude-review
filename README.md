@@ -73,10 +73,6 @@ npx @vscode/vsce package
 - Claude や `gh` の **利用料・レート制限**は各サービス／契約に従います。
 - 大きな差分では実行時間とトークン消費が増えます。
 
-## ライセンス
-
-`package.json` の `publisher` 等に合わせて、配布時はライセンス表記を追加してください。
-
 ---
 
 ## English
@@ -151,7 +147,3 @@ Review workflow and report shape live in **`src/SKILL.md`**, copied to **`out/SK
 - Reviews are **assistive**; humans should decide whether to merge.
 - **Billing and rate limits** for Claude and `gh` follow your accounts and plans.
 - Large diffs increase runtime and token usage.
-
-### License
-
-Add an explicit license before publishing; align with `publisher` and distribution needs in `package.json`.
