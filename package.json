@@ -1,0 +1,115 @@
+{
+  "name": "claude-pr-review",
+  "displayName": "Claude PR Review (review-master)",
+  "description": "Review GitHub PRs with Claude Code using the review-master skill workflow.",
+  "version": "0.1.0",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:claudePrReview.reviewPr",
+    "onCommand:claudePrReview.reviewBranches",
+    "onCommand:claudePrReview.openInteractive",
+    "onView:claudePrReview.sidebar",
+    "onView:claudePrReview.report"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "claude-pr-review",
+          "title": "PR Review",
+          "icon": "media/sidebar.svg"
+        }
+      ]
+    },
+    "views": {
+      "claude-pr-review": [
+        {
+          "id": "claudePrReview.sidebar",
+          "name": "PR Review",
+          "icon": "media/sidebar.svg"
+        },
+        {
+          "id": "claudePrReview.report",
+          "name": "Report",
+          "type": "webview",
+          "icon": "media/sidebar.svg"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "claudePrReview.reviewPr",
+        "title": "Claude PR Review: Run review-master on PR"
+      },
+      {
+        "command": "claudePrReview.reviewBranches",
+        "title": "Claude PR Review: Review diff between remote and local branch"
+      },
+      {
+        "command": "claudePrReview.openInteractive",
+        "title": "Claude PR Review: Open Claude Code (use /review-master)"
+      }
+    ],
+    "configuration": {
+      "title": "Claude PR Review",
+      "properties": {
+        "claudePrReview.claudeExecutable": {
+          "type": "string",
+          "default": "claude",
+          "description": "Path or name of the Claude Code CLI (e.g. claude)."
+        },
+        "claudePrReview.skillPath": {
+          "type": "string",
+          "default": "",
+          "description": "Override path to SKILL.md. Empty uses the extension bundle (out/SKILL.md from src/SKILL.md), then ~/.claude/skills/review-master/SKILL.md if present."
+        },
+        "claudePrReview.allowedTools": {
+          "type": "string",
+          "default": "Bash(gh *),Bash(git *),Read",
+          "description": "Comma-separated --allowedTools value for headless claude -p (permission rule syntax)."
+        },
+        "claudePrReview.maxTurns": {
+          "type": "number",
+          "default": 40,
+          "description": "Maximum agent turns for headless review (--max-turns)."
+        },
+        "claudePrReview.outputFormat": {
+          "type": "string",
+          "enum": [
+            "text",
+            "json"
+          ],
+          "default": "text",
+          "description": "When live stream is off: claude -p --output-format. Ignored while live stream is on (uses stream-json)."
+        },
+        "claudePrReview.liveStreamOutput": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use stream-json with verbose partial messages so output and progress update during the run (avoids stdin wait + line-buffered silence)."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./ && node scripts/copy-skill.js",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "markdown-it": "^14.1.1",
+    "markdown-it-multimd-table": "^4.2.3"
+  }
+}
